@@ -1,0 +1,6 @@
+{
+  "name": "Remix: 台灣油價查詢",
+  "description": "自動查詢中油官方所公布的最新各個油品油價的價格，並即時分析說明下週油價調整公告與原因。",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
