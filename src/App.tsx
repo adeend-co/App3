@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Droplet, TrendingDown, TrendingUp, Info, Calendar, Newspaper, Download } from "lucide-react";
 import { Capacitor } from "@capacitor/core";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 import { App as CapacitorApp } from "@capacitor/app";
 
@@ -95,8 +96,9 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8 font-sans">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <>
+      <div className="min-h-screen bg-gray-50 p-4 md:p-8 font-sans">
+        <div className="max-w-4xl mx-auto space-y-6">
         
         {/* 新版 APK 更新提示 */}
         {updateAvailable && (
@@ -219,5 +221,7 @@ export default function App() {
         </section>
       </div>
     </div>
+    <SpeedInsights />
+  </>
   );
 }
