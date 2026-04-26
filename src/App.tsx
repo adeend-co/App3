@@ -130,11 +130,11 @@ export default function App() {
         )}
 
         <header className="flex items-center gap-3">
-          <div className="p-3 bg-blue-600 text-white rounded-xl shadow-sm">
-            <Droplet className="w-8 h-8" />
+          <div className="w-14 h-14 rounded-xl shadow-sm overflow-hidden shrink-0">
+            <img src="/icon.svg" alt="Icon" className="w-full h-full object-cover" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900">台灣中油油價查詢</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900">油價查詢</h1>
             <p className="text-gray-500 mt-1">最新油價與下週調整公告分析</p>
           </div>
         </header>

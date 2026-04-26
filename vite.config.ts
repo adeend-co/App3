@@ -14,8 +14,8 @@ export default defineConfig(({mode}) => {
         registerType: 'autoUpdate',
         includeAssets: ['favicon.ico', 'icon.svg'],
         manifest: {
-          name: '台灣中油油價預測小幫手',
-          short_name: '油價小幫手',
+          name: '油價查詢',
+          short_name: '油價查詢',
           description: '台灣中油最新油價資訊與趨勢預測',
           theme_color: '#ffffff',
           background_color: '#ffffff',
