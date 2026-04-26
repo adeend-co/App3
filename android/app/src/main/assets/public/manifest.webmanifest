@@ -1,1 +1,1 @@
-{"name":"台灣中油油價預測小幫手","short_name":"油價小幫手","description":"台灣中油最新油價資訊與趨勢預測","start_url":"/","display":"standalone","background_color":"#ffffff","theme_color":"#ffffff","lang":"en","scope":"/","icons":[{"src":"icon.png","sizes":"512x512","type":"image/png"}]}
+{"name":"台灣中油油價預測小幫手","short_name":"油價小幫手","description":"台灣中油最新油價資訊與趨勢預測","start_url":"/","display":"standalone","background_color":"#ffffff","theme_color":"#ffffff","lang":"en","scope":"/","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml"}]}

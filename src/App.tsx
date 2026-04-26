@@ -23,7 +23,7 @@ export default function App() {
         const currentVersion = import.meta.env.VITE_APP_VERSION;
         if (!currentVersion || currentVersion === "development") return;
 
-        const res = await fetch("https://api.github.com/repos/adeend-co/-App-2/releases/latest");
+        const res = await fetch("https://api.github.com/repos/adeend-co/App3/releases/latest");
         if (!res.ok) return;
         const data = await res.json();
         
@@ -45,7 +45,7 @@ export default function App() {
       try {
         // 使用 Capacitor 的 API 精準判斷是否在原生 APP 內執行
         const isNative = Capacitor.isNativePlatform();
-        const defaultApiUrl = isNative ? "https://app3-tau-livid.vercel.app/" : ""; // 更換成您在 Vercel 實際部署完成後的網址
+        const defaultApiUrl = isNative ? "https://app3-tau-livid.vercel.app" : ""; // 更換成您在 Vercel 實際部署完成後的網址
         const apiUrl = import.meta.env.VITE_API_BASE_URL || defaultApiUrl;
         
         const [newsRes, pricesRes] = await Promise.all([
@@ -114,7 +114,8 @@ export default function App() {
                   try {
                     const { Browser } = await import('@capacitor/browser');
                     await Browser.open({ url: updateAvailable.url });
-                  } catch(e) {
+                  } catch (e) {
+                    console.error("Browser plugin failed to load", e);
                     window.open(updateAvailable.url, "_blank", "noopener,noreferrer");
                   }
                 } else {

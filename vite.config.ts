@@ -12,7 +12,7 @@ export default defineConfig(({mode}) => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['favicon.ico', 'icon.png'],
+        includeAssets: ['favicon.ico', 'icon.svg'],
         manifest: {
           name: '台灣中油油價預測小幫手',
           short_name: '油價小幫手',
@@ -23,9 +23,9 @@ export default defineConfig(({mode}) => {
           start_url: '/',
           icons: [
             {
-              src: 'icon.png',
-              sizes: '512x512',
-              type: 'image/png'
+              src: 'icon.svg',
+              sizes: 'any',
+              type: 'image/svg+xml'
             }
           ]
         }
