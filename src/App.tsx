@@ -201,7 +201,7 @@ export default function App() {
 
         <section className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
            <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-             <Droplet className="w-5 h-5 text-gray-400" />
+             <img src="/icon.svg" alt="App Icon" className="w-5 h-5 flex-none" />
              目前各油品供應價格
            </h2>
            {prices && prices.length > 0 ? (
