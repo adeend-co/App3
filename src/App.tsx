@@ -45,7 +45,7 @@ export default function App() {
       try {
         // 使用 Capacitor 的 API 精準判斷是否在原生 APP 內執行
         const isNative = Capacitor.isNativePlatform();
-        const defaultApiUrl = isNative ? "https://app-2-chi.vercel.app" : ""; // 更換成您在 Vercel 實際部署完成後的網址
+        const defaultApiUrl = isNative ? "https://app3-tau-livid.vercel.app/" : ""; // 更換成您在 Vercel 實際部署完成後的網址
         const apiUrl = import.meta.env.VITE_API_BASE_URL || defaultApiUrl;
         
         const [newsRes, pricesRes] = await Promise.all([
@@ -111,9 +111,14 @@ export default function App() {
             <button 
               onClick={async () => {
                 if (Capacitor.isNativePlatform()) {
-                  await CapacitorApp.openUrl({ url: updateAvailable.url });
+                  try {
+                    const { Browser } = await import('@capacitor/browser');
+                    await Browser.open({ url: updateAvailable.url });
+                  } catch(e) {
+                    window.open(updateAvailable.url, "_blank", "noopener,noreferrer");
+                  }
                 } else {
-                  window.open(updateAvailable.url, "_blank");
+                  window.open(updateAvailable.url, "_blank", "noopener,noreferrer");
                 }
               }}
               className="bg-white text-blue-600 px-4 py-2 rounded-lg font-bold shadow-sm hover:bg-gray-50 transition-colors whitespace-nowrap text-center w-full sm:w-auto cursor-pointer"
