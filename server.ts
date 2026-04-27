@@ -107,24 +107,22 @@ async function startServer() {
         if (title.includes("汽") || title.includes("柴") || title.includes("油價")) {
              hasAnnounced = true;
              
-             // Check if it's an old announcement or already active
-             const dateMatch = title.match(/(\d{1,2})\/(\d{1,2})/);
-             if (dateMatch && dateMatch.length >= 3) {
-                 const startM = Number(dateMatch[1]);
-                 const startD = Number(dateMatch[2]);
-                 const nowOptions = { timeZone: "Asia/Taipei" };
-                 const nowStr = new Date().toLocaleString("en-US", nowOptions);
-                 const now = new Date(nowStr);
-                 const currentMonth = now.getMonth() + 1;
-                 const currentDay = now.getDate();
-                 
-                 // if the announcement's start date is today or earlier, it's for the current/past week
-                 if (startM < currentMonth || (startM === currentMonth && startD <= currentDay)) {
-                     hasAnnounced = false;
-                     adjustment = "尚未宣布";
-                     date = "";
-                     reasoning = "官方尚未宣布";
-                 }
+             // 使用台北時間推算本週一的日期
+             const nowOptions = { timeZone: "Asia/Taipei" };
+             const nowStr = new Date().toLocaleString("en-US", nowOptions);
+             const now = new Date(nowStr);
+             const day = now.getDay();
+             const diffToMonday = now.getDate() - day + (day === 0 ? -6 : 1);
+             const thisWeekMonday = new Date(now);
+             thisWeekMonday.setDate(diffToMonday);
+             const thisWeekMondayStr = `${thisWeekMonday.getMonth() + 1}/${thisWeekMonday.getDate()}`;
+             
+             // 如果新聞標題包含本週一的日期，代表那是本週的（尚未發布下週的）
+             if (title.includes(thisWeekMondayStr)) {
+                 hasAnnounced = false;
+                 adjustment = "尚未宣布";
+                 date = "";
+                 reasoning = "官方尚未宣布";
              }
 
              if (hasAnnounced) {

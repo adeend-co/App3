@@ -17,6 +17,14 @@ const getWeekRange = (date: Date, offsetWeeks: number = 0) => {
   return `${format(resultStart)}~${format(resultEnd)}`;
 };
 
+const getMondayStr = (date: Date, offsetWeeks: number = 0) => {
+  const resultStart = new Date(date);
+  const day = resultStart.getDay();
+  const diffToMonday = resultStart.getDate() - day + (day === 0 ? -6 : 1);
+  resultStart.setDate(diffToMonday + offsetWeeks * 7);
+  return `${resultStart.getMonth() + 1}/${resultStart.getDate()}`;
+};
+
 export default function App() {
   const today = new Date();
   const currentWeekStr = getWeekRange(today, 0);
@@ -76,7 +84,21 @@ export default function App() {
         const priceData = await pricesRes.json();
 
         setNews({ title: newsData.title, url: newsData.url });
-        if (newsData.analysis) {
+        if (newsData.analysis && newsData.title) {
+          // 強制使用 App 端的時間與邏輯來判斷：直接對比新聞標題是否包含「本週一」的日期字串
+          const title = newsData.title;
+          const today = new Date();
+          const thisWeekMondayStr = getMondayStr(today, 0); 
+          const nextWeekMondayStr = getMondayStr(today, 1);
+          
+          if (title.includes(thisWeekMondayStr)) {
+              // 標題寫的是本週起始日 -> 這是本週的舊新聞，下週尚未宣布
+              newsData.analysis.hasAnnounced = false;
+          } else if (title.includes(nextWeekMondayStr)) {
+              // 標題寫的是下週起始日 -> 真的是下週新聞
+              newsData.analysis.hasAnnounced = true;
+          }
+          
           setAnalysis(newsData.analysis);
         }
 
