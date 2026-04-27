@@ -66,10 +66,10 @@ async function startServer() {
 
           請從中提取以下資訊並以 JSON 格式回傳（不要加上 Markdown 語法，直接回傳 JSON）：
           {
-            "hasAnnounced": （布林值）根據這篇公告的標題、內容中的生效日期與今天的日期判斷，這篇公告是否是針對「下一週」（未來一週）的最新油價調整公告？如果是舊的（例如已過期或針對上一週），請填 false；如果是剛宣布要用於下週的，請填 true。如果尚未宣布，前端將顯示尚未宣布。,
-            "adjustment": "簡短說明下週油價調整狀況（例如：汽柴油各調降0.1元、汽油調漲0.1元柴油不調整、汽柴油不調整等）。",
-            "reasoning": "說明調降或不調整的完整原因（例如國際油價下跌或平穩雙機制吸收等細節，如果尚未宣布下週油價則填空字串。）。",
-            "date": "正式實施日期及時段（例如：4月27日凌晨零時起至5月3日），如果無相關資訊則填空字串。"
+            "hasAnnounced": (布林值) 請判斷這篇公告是不是針對「還沒到來的下一週」。如果這篇公告的實施起始日「就是在今天」或者是「過去的日期」，代表這已經是『本週已經在實施』的油價（不能算是下一週的公告），請務必填 false。如果是針對未來的日期（例如這週日宣布，預計明天週一才實施），才填 true。,
+            "adjustment": "簡短說明油價調整狀況（例如：汽柴油各調降0.1元、汽油調漲0.1元柴油不調整、汽柴油不調整等）。如果 hasAnnounced 為 false，請填 '尚未宣布'。",
+            "reasoning": "說明調降或不調整的完整原因（例如國際油價下跌或平穩雙機制吸收等細節）。如果尚未宣布，填空字串。",
+            "date": "實施日期及時段（例如：4月27日凌晨零時起至5月3日）。如果無相關資訊填空字串。"
           }`;
 
           const response = await ai.models.generateContent({
@@ -107,17 +107,19 @@ async function startServer() {
         if (title.includes("汽") || title.includes("柴") || title.includes("油價")) {
              hasAnnounced = true;
              
-             // Check if it's an old announcement
-             const dateMatches = title.match(/(\d{1,2})\/(\d{1,2})/g);
-             if (dateMatches && dateMatches.length >= 2) {
-                 const endDateStr = dateMatches[1]; // e.g. "5/3" or "4/26"
-                 const [m, d] = endDateStr.split('/').map(Number);
-                 const now = new Date();
+             // Check if it's an old announcement or already active
+             const dateMatch = title.match(/(\d{1,2})\/(\d{1,2})/);
+             if (dateMatch && dateMatch.length >= 3) {
+                 const startM = Number(dateMatch[1]);
+                 const startD = Number(dateMatch[2]);
+                 const nowOptions = { timeZone: "Asia/Taipei" };
+                 const nowStr = new Date().toLocaleString("en-US", nowOptions);
+                 const now = new Date(nowStr);
                  const currentMonth = now.getMonth() + 1;
                  const currentDay = now.getDate();
                  
-                 // if the announcement's end date is today or earlier, it's for the current/past week
-                 if (m < currentMonth || (m === currentMonth && d <= currentDay)) {
+                 // if the announcement's start date is today or earlier, it's for the current/past week
+                 if (startM < currentMonth || (startM === currentMonth && startD <= currentDay)) {
                      hasAnnounced = false;
                      adjustment = "尚未宣布";
                      date = "";

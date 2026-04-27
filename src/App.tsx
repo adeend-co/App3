@@ -4,7 +4,26 @@ import { Capacitor } from "@capacitor/core";
 
 import { App as CapacitorApp } from "@capacitor/app";
 
+const getWeekRange = (date: Date, offsetWeeks: number = 0) => {
+  const resultStart = new Date(date);
+  const day = resultStart.getDay();
+  const diffToMonday = resultStart.getDate() - day + (day === 0 ? -6 : 1);
+  resultStart.setDate(diffToMonday + offsetWeeks * 7);
+
+  const resultEnd = new Date(resultStart);
+  resultEnd.setDate(resultStart.getDate() + 6);
+
+  const format = (d: Date) => `${d.getMonth() + 1}/${d.getDate()}`;
+  return `${format(resultStart)}~${format(resultEnd)}`;
+};
+
 export default function App() {
+  const today = new Date();
+  const currentWeekStr = getWeekRange(today, 0);
+  const nextWeekStr = getWeekRange(today, 1);
+  const daysOfWeek = ['日', '一', '二', '三', '四', '五', '六'];
+  const todayStr = `${today.getFullYear()}年${today.getMonth() + 1}月${today.getDate()}日 (星期${daysOfWeek[today.getDay()]})`;
+
   const [prices, setPrices] = useState<any[]>([]);
   const [news, setNews] = useState<any>(null);
   const [analysis, setAnalysis] = useState<{
@@ -135,7 +154,10 @@ export default function App() {
           </div>
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-gray-900">油價查詢</h1>
-            <p className="text-gray-500 mt-1">最新油價與下週調整公告分析</p>
+            <p className="text-gray-500 mt-1">目前最新油價與下週調整分析</p>
+            <div className="mt-2 text-sm font-medium text-blue-600 bg-blue-50 inline-block px-3 py-1 rounded-full">
+              今天是：{todayStr}
+            </div>
           </div>
         </header>
 
@@ -147,10 +169,10 @@ export default function App() {
                 <Newspaper className="w-6 h-6" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-gray-900">下週油價調整公告</h2>
+                <h2 className="text-xl font-bold text-gray-900">下週油價調整分析 ({nextWeekStr})</h2>
                 {news && news.title !== "No news found" && (
                   <a href={news.url} target="_blank" rel="noreferrer" className="text-sm text-blue-600 hover:underline mt-1 block">
-                    來源：{news.title}
+                    中油近期新聞：{news.title}
                   </a>
                 )}
               </div>
@@ -177,8 +199,8 @@ export default function App() {
 
                 <div className="mt-6 bg-blue-50/50 p-5 rounded-xl border border-blue-100">
                   <div className="flex items-center gap-2 text-blue-800 font-medium mb-3">
-                    <Info className="w-5 h-5" />
-                    調整原因探討
+                    <Info className="w-5 h-5 text-indigo-600" />
+                    調整原因探討 (官方完整說明)
                   </div>
                   <p className="text-gray-700 leading-relaxed text-sm md:text-base">
                     {analysis.reasoning}
@@ -199,10 +221,11 @@ export default function App() {
           </section>
         )}
 
-        <section className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
+        <section className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 mt-6 relative overflow-hidden">
+           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-teal-400 to-teal-500"></div>
            <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-             <img src="/icon.svg" alt="App Icon" className="w-5 h-5 flex-none" />
-             目前各油品供應價格
+             <img src="/icon.svg" alt="App Icon" className="w-6 h-6 flex-none" />
+             目前各油品供應價格 (本週實施中：{currentWeekStr})
            </h2>
            {prices && prices.length > 0 ? (
              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
