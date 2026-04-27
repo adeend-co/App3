@@ -1,1 +1,59 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Outfit:wght@400;500;600&display=swap');
+
+:root {
+  --sat: env(safe-area-inset-top, 20px);
+  --sab: env(safe-area-inset-bottom, 20px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+}
+
+body {
+  margin: 0;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  background-color: #F0F4F9; /* Google M3 Surface */
+  color: #1F1F1F; /* Google M3 On-Surface */
+  font-family: 'Outfit', 'Noto Sans TC', system-ui, -apple-system, sans-serif;
+  overscroll-behavior-y: none;
+}
+
+.selectable {
+  user-select: auto;
+  -webkit-user-select: auto;
+}
+
+/* Material Design Spinner */
+.md-spinner {
+  animation: md-rotate 2s linear infinite;
+}
+
+.md-spinner-circle {
+  stroke: currentColor;
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+  animation: md-dash 1.5s ease-in-out infinite;
+  stroke-linecap: round;
+}
+
+@keyframes md-rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes md-dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 200;
+    stroke-dashoffset: -35px;
+  }
+  100% {
+    stroke-dasharray: 90, 200;
+    stroke-dashoffset: -124px;
+  }
+}
+
